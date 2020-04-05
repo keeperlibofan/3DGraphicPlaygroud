@@ -1,4 +1,4 @@
-package com.bn.Sample8_1;
+package com.bn.Sample8_1.CylinderFactory;
 import static com.bn.Sample8_1.ShaderUtil.createProgram;
 
 import java.nio.ByteBuffer;
@@ -7,8 +7,12 @@ import java.nio.FloatBuffer;
 
 import android.opengl.GLES30;
 
+import com.bn.Sample8_1.MatrixState;
+import com.bn.Sample8_1.MySurfaceView;
+import com.bn.Sample8_1.ShaderUtil;
+
 //圆柱侧面
-public class CylinderSide 
+class CylinderSide
 {	
 	int mProgram;//自定义渲染管线着色器程序id
     int muMVPMatrixHandle;//总变换矩阵引用
@@ -32,7 +36,7 @@ public class CylinderSide
     float yAngle=0;//绕y轴旋转的角度
     float zAngle=0;//绕z轴旋转的角度
     
-    public CylinderSide(MySurfaceView mv,float scale,float r,float h,int n)
+    public CylinderSide(MySurfaceView mv, float scale, float r, float h, int n)
     {    	
     	//调用初始化顶点数据的initVertexData方法
     	initVertexData(scale,r,h,n);
@@ -142,7 +146,7 @@ public class CylinderSide
     public void initShader(MySurfaceView mv)
     {
     	//加载顶点着色器的脚本内容
-        mVertexShader=ShaderUtil.loadFromAssetsFile("vertex_tex_light.sh", mv.getResources());
+        mVertexShader= ShaderUtil.loadFromAssetsFile("vertex_tex_light.sh", mv.getResources());
         //加载片元着色器的脚本内容
         mFragmentShader=ShaderUtil.loadFromAssetsFile("frag_tex_light.sh", mv.getResources());  
         //基于顶点着色器与片元着色器创建程序

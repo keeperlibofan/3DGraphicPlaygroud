@@ -1,22 +1,26 @@
-package com.bn.Sample8_1;
+package com.bn.Sample8_1.CylinderFactory;
+
+import com.bn.Sample8_1.MatrixState;
+import com.bn.Sample8_1.MySurfaceView;
+
 //圆柱类
 public class Cylinder
 {
-	Circle bottomCircle;//底圆
-	Circle topCircle;//顶圆
-	CylinderSide cylinderSide;//侧面
-	float xAngle=0;//绕x轴旋转的角度
-    float yAngle=0;//绕y轴旋转的角度
-    float zAngle=0;//绕z轴旋转的角度
-    float h;
-    float scale;
+	private Circle bottomCircle;//底圆
+	private Circle topCircle;//顶圆
+	private CylinderSide cylinderSide;//侧面
+	public float xAngle=0;//绕x轴旋转的角度
+    public float yAngle=0;//绕y轴旋转的角度
+    public float zAngle=0;//绕z轴旋转的角度
+    private float h;
+    private float scale;
 
-    int topTexId; //顶面纹理
-    int BottomTexId;  //底面纹理
-    int sideTexId;  //侧面纹理
+    private int topTexId; //顶面纹理
+    private int BottomTexId;  //底面纹理
+    private int sideTexId;  //侧面纹理
     
-	public Cylinder(MySurfaceView mySurfaceView,float scale,float r, float h,int n,
-			int topTexId, int BottomTexId, int sideTexId)
+	public Cylinder(MySurfaceView mySurfaceView, float scale, float r, float h, int n,
+					int topTexId, int BottomTexId, int sideTexId)
 	{
 		
 		this.h=h;

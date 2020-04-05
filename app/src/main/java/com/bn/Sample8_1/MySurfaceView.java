@@ -10,13 +10,14 @@ import android.view.MotionEvent;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.bn.Sample8_1.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-class MySurfaceView extends GLSurfaceView {
+import com.bn.Sample8_1.CylinderFactory.Cylinder;
+import com.bn.Sample8_1.CylinderFactory.CylinderL;
+
+public class MySurfaceView extends GLSurfaceView {
     
 	private final float TOUCH_SCALE_FACTOR = 180.0f/320;//角度缩放比例
 	private float mPreviousY;//上次的触控位置Y坐标
