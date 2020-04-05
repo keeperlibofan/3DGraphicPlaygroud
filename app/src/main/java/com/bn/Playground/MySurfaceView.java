@@ -1,4 +1,4 @@
-package com.bn.Sample8_1;
+package com.bn.Playground;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,8 +14,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.bn.Sample8_1.CylinderFactory.Cylinder;
-import com.bn.Sample8_1.CylinderFactory.CylinderL;
+import com.bn.Playground.CylinderFactory.Cylinder;
+import com.bn.Playground.CylinderFactory.CylinderL;
 
 public class MySurfaceView extends GLSurfaceView {
     

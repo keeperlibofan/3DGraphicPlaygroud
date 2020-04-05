@@ -1,6 +1,4 @@
-package com.bn.Sample8_1;
-
-import com.bn.Sample8_1.R;
+package com.bn.Playground;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;

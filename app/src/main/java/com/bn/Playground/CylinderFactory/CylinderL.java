@@ -1,7 +1,7 @@
-package com.bn.Sample8_1.CylinderFactory;
+package com.bn.Playground.CylinderFactory;
 
-import com.bn.Sample8_1.MatrixState;
-import com.bn.Sample8_1.MySurfaceView;
+import com.bn.Playground.MatrixState;
+import com.bn.Playground.MySurfaceView;
 
 //π«º‹‘≤÷˘¿‡
 public class CylinderL
