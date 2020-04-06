@@ -47,9 +47,9 @@ public class MatrixState
     	Matrix.translateM(currMatrix, 0, x, y, z);
     }
     
-    public static void rotate(float angle,float x,float y,float z)//…Ë÷√»∆xyz÷·“∆∂Ø
+    public static void rotate(float angle, float x, float y, float z)//…Ë÷√»∆xyz÷·“∆∂Ø
     {
-    	Matrix.rotateM(currMatrix,0,angle,x,y,z);
+    	Matrix.rotateM(currMatrix,0, angle, x, y, z);
     }
     
     public static void scale(float x,float y,float z)

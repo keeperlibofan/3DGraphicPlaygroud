@@ -29,6 +29,14 @@
 	         android:id="@+id/RadioButton02"
 	         android:layout_width="wrap_content" 
 	         android:layout_height="wrap_content">
-	      </RadioButton>  
+	      </RadioButton>
+		<Button
+			android:id="@+id/Button01"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="下一个"></Button>
 	</RadioGroup>
+
 </LinearLayout>
+
