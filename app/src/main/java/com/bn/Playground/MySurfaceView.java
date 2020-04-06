@@ -30,6 +30,7 @@ public class MySurfaceView extends GLSurfaceView {
     
     boolean drawWhatFlag=true;	//绘制线填充方式的标志位
     boolean lightFlag=true;
+    int count = 0;
 
 	public MySurfaceView(Context context) {
         super(context);
@@ -48,17 +49,11 @@ public class MySurfaceView extends GLSurfaceView {
         case MotionEvent.ACTION_MOVE:
             float dy = y - mPreviousY;//计算触控笔Y位移
             float dx = x - mPreviousX;//计算触控笔X位移
-//            mRenderer.cylinder.yAngle += dx * TOUCH_SCALE_FACTOR;//设置绕y轴旋转角度
-//            mRenderer.cylinder.zAngle += dy * TOUCH_SCALE_FACTOR;//设置绕z轴旋转角度
-//
-//            mRenderer.cylinderl.yAngle += dx * TOUCH_SCALE_FACTOR;//设置绕y轴旋转角度
-//            mRenderer.cylinderl.zAngle += dy * TOUCH_SCALE_FACTOR;//设置绕z轴旋转角度
+            mRenderer.graph.addyAngle(dx * TOUCH_SCALE_FACTOR);//设置绕y轴旋转角度
+            mRenderer.graph.addzAngle(dy * TOUCH_SCALE_FACTOR);//设置绕z轴旋转角度
 
-            mRenderer.cone.yAngle += dx * TOUCH_SCALE_FACTOR;//设置绕y轴旋转角度
-            mRenderer.cone.zAngle+= dy * TOUCH_SCALE_FACTOR;//设置绕z轴旋转角度
-
-            mRenderer.conel.yAngle += dx * TOUCH_SCALE_FACTOR;//设置绕y轴旋转角度
-            mRenderer.conel.zAngle+= dy * TOUCH_SCALE_FACTOR;//设置绕z轴旋转角度
+            mRenderer.graphl.addyAngle(dx * TOUCH_SCALE_FACTOR);//设置绕x轴旋转角度
+            mRenderer.graphl.addzAngle(dy * TOUCH_SCALE_FACTOR);//设置绕z轴旋转角度
         }
         mPreviousY = y;//记录触控笔位置
         mPreviousX = x;//记录触控笔位置
@@ -66,35 +61,42 @@ public class MySurfaceView extends GLSurfaceView {
     }
     
 	private class SceneRenderer implements GLSurfaceView.Renderer 
-    {   
-		
+    {
+        Graph graph;
+        Graph graphl;
+
 		Cylinder cylinder;
 		CylinderL cylinderl;
 
         Cone cone;
         ConeL conel;
-		
+
         public void onDrawFrame(GL10 gl) 
         { 
         	//清除深度缓冲与颜色缓冲
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);   
-            
+
+            switch (count) {
+                case 0:
+                    graph = cylinder;
+                    graphl = cylinderl;
+                    break;
+                case 1:
+                    graph = cone;
+                    graphl = conel;
+                    break;
+            }
             //保护现场
             MatrixState.pushMatrix();
             MatrixState.translate(0, 0, -10);
-            if(drawWhatFlag)
-            {
-                cone.drawSelf();
-                //cylinder.drawSelf();
-
-            }else
-            {
-                conel.drawSelf();
-                //cylinderl.drawSelf();
+            if(drawWhatFlag) {
+                graph.drawSelf();
+            } else {
+                graphl.drawSelf();
             }
             MatrixState.popMatrix();
             
-        }   
+        }
 
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             //设置视窗大小及位置 
@@ -144,16 +146,14 @@ public class MySurfaceView extends GLSurfaceView {
             MatrixState.setInitStack();
             //加载纹理
             textureId=initTexture(R.drawable.android_robot0);
-//            //创建圆柱对象
-//            cylinder = new Cylinder(MySurfaceView.this,1,1.2f,3.9f,36, textureId, textureId, textureId);
-//            //创建圆柱骨架对象
-//            cylinderl= new CylinderL(MySurfaceView.this,1,1.2f,3.9f,36);
-
+            //创建圆柱对象 初始化
+            cylinder = new Cylinder(MySurfaceView.this,1,1.2f,3.9f,36, textureId, textureId, textureId);
+            //创建圆柱骨架对象
+            cylinderl = new CylinderL(MySurfaceView.this,1,1.2f,3.9f,36);
             //创建圆锥对象
             cone = new Cone(MySurfaceView.this,1,1.6f,3.9f,36,textureId,textureId);
             //创建圆锥骨架对象
-            conel = new ConeL(MySurfaceView.this,1,1.6f,3.9f,36);
-            
+            conel= new ConeL(MySurfaceView.this,1,1.6f,3.9f,36);
         }
     }
 	

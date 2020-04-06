@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -63,7 +65,17 @@ public class MyActivity extends Activity {
      				}
      			}        	   
             }         		
-        );         
+        );
+        Button nextb = (Button)findViewById(R.id.Button01); // 竟然不会被垃圾回收?
+        nextb.setOnClickListener(
+            new View.OnClickListener() {
+                public void onClick(View v) {
+                    mySurfaceView.count ++;
+                    mySurfaceView.count %= 2;
+                    System.out.println(mySurfaceView.count);
+                }
+            }
+        );
     }
     @Override
     protected void onResume() {

@@ -1,16 +1,26 @@
 package com.bn.Playground.ConeFactory;
 
+import com.bn.Playground.Graph;
 import com.bn.Playground.MatrixState;
 import com.bn.Playground.MySurfaceView;
 
 //圆锥类
-public class Cone
+public class Cone implements Graph
 {
 	Circle bottomCircle;//底圆
 	ConeSide coneSide;//侧面
-	public float xAngle=0;//绕x轴旋转的角度
-    public float yAngle=0;//绕y轴旋转的角度
-    public float zAngle=0;//绕z轴旋转的角度
+	private float xAngle=0;//绕x轴旋转的角度
+	public void addxAngle(float xAngle) {
+		this.xAngle += xAngle;
+	}
+	private float yAngle=0;//绕y轴旋转的角度
+	public void addyAngle(float yAngle) {
+		this.yAngle += yAngle;
+	}
+	private float zAngle=0;//绕z轴旋转的角度
+	public void addzAngle(float zAngle) {
+		this.zAngle += zAngle;
+	}
     float h;
     float scale;
 
