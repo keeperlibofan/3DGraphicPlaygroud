@@ -18,6 +18,8 @@ import com.bn.Playground.ConeFactory.Cone;
 import com.bn.Playground.ConeFactory.ConeL;
 import com.bn.Playground.CylinderFactory.Cylinder;
 import com.bn.Playground.CylinderFactory.CylinderL;
+import com.bn.Playground.TorusFactory.Torus;
+import com.bn.Playground.TorusFactory.TorusL;
 
 public class MySurfaceView extends GLSurfaceView {
     
@@ -26,7 +28,7 @@ public class MySurfaceView extends GLSurfaceView {
     private float mPreviousX;//上次的触控位置X坐标
 	
 	private SceneRenderer mRenderer;//场景渲染器
-    int textureId;      //系统分配的纹理id 
+    int[] textureIds = new int[2];      //系统分配的纹理id
     
     boolean drawWhatFlag=true;	//绘制线填充方式的标志位
     boolean lightFlag=true;
@@ -65,11 +67,15 @@ public class MySurfaceView extends GLSurfaceView {
         Graph graph;
         Graph graphl;
 
+        // 所有图形
 		Cylinder cylinder;
 		CylinderL cylinderl;
 
         Cone cone;
         ConeL conel;
+
+        Torus torus;
+        TorusL torusl;
 
         public void onDrawFrame(GL10 gl) 
         { 
@@ -85,6 +91,9 @@ public class MySurfaceView extends GLSurfaceView {
                     graph = cone;
                     graphl = conel;
                     break;
+                case 2:
+                    graph = torus;
+                    graphl = torusl;
             }
             //保护现场
             MatrixState.pushMatrix();
@@ -145,15 +154,21 @@ public class MySurfaceView extends GLSurfaceView {
             //初始化变换矩阵
             MatrixState.setInitStack();
             //加载纹理
-            textureId=initTexture(R.drawable.android_robot0);
+            textureIds[0]=initTexture(R.drawable.android_robot0);
+            textureIds[1]=initTexture(R.drawable.android_robot1);
+
             //创建圆柱对象 初始化
-            cylinder = new Cylinder(MySurfaceView.this,1,1.2f,3.9f,36, textureId, textureId, textureId);
+            cylinder = new Cylinder(MySurfaceView.this,1,1.2f,3.9f,36, textureIds[0], textureIds[0], textureIds[0]);
             //创建圆柱骨架对象
             cylinderl = new CylinderL(MySurfaceView.this,1,1.2f,3.9f,36);
             //创建圆锥对象
-            cone = new Cone(MySurfaceView.this,1,1.6f,3.9f,36,textureId,textureId);
+            cone = new Cone(MySurfaceView.this,1,1.6f,3.9f,36,textureIds[0],textureIds[0]);
             //创建圆锥骨架对象
             conel= new ConeL(MySurfaceView.this,1,1.6f,3.9f,36);
+            //创建圆环对象
+            torus = new Torus(MySurfaceView.this,2.25f, 1.2f, 10, 30, textureIds[1]);
+            //创建圆环对象
+            torusl= new TorusL(MySurfaceView.this,2.25f, 1.2f, 10, 30);
         }
     }
 	

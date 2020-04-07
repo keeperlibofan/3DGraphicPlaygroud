@@ -71,7 +71,7 @@ public class MyActivity extends Activity {
             new View.OnClickListener() {
                 public void onClick(View v) {
                     mySurfaceView.count ++;
-                    mySurfaceView.count %= 2;
+                    mySurfaceView.count %= 3;
                     System.out.println(mySurfaceView.count);
                 }
             }
