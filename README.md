@@ -18,7 +18,7 @@
 
 ## 圆环
 ### 运行效果
-![Alt text](./image/download-5.jpg) ![Alt text](./image/download-6.jpg) 
+![Alt text](./image/download-5.jpg =50x50) ![Alt text](./image/download-6.jpg =50x50) 
 
 ### 顶点计算公式
 ![Alt text](./image/download-4.png)
