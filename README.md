@@ -18,7 +18,7 @@
 
 ## 圆环
 ### 运行效果
-![Alt text](./image/download-5.jpg){:height="50%" width="50%"} ![Alt text](./image/download-6.jpg){:height="50%" width="50%"}
+![Alt text](./image/download-5.jpg) ![Alt text](./image/download-6.jpg)
 
 ### 顶点计算公式
 ![Alt text](./image/download-4.png)
@@ -38,4 +38,8 @@
 
 ## 几何球体
 ### 顶点绘制
+几何球体和普通球体最大的不同就在于纹理排布
+- 普通球体根据类似地球经纬度的方式排布顶点，纹理会有比较强烈的拉升
+- 普通球体纹理能完整显示，集合球体纹理无法完全显示, 尽量合理调整
+- 几何球体是由正十二面体作为原型
 

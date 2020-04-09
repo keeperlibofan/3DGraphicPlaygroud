@@ -234,6 +234,6 @@ class CylinderSideL
          //绘制线条的粗细
          GLES30.glLineWidth(2);
          //绘制
-         GLES30.glDrawArrays(GLES30.GL_LINES, 0, vCount); 
+         GLES30.glDrawArrays(GLES30.GL_LINE_STRIP, 0, vCount);
     }
 }

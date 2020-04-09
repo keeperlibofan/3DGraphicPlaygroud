@@ -18,6 +18,8 @@ import com.bn.Playground.ConeFactory.Cone;
 import com.bn.Playground.ConeFactory.ConeL;
 import com.bn.Playground.CylinderFactory.Cylinder;
 import com.bn.Playground.CylinderFactory.CylinderL;
+import com.bn.Playground.Ragular20Factory.Regular20L;
+import com.bn.Playground.Ragular20Factory.Regular20;
 import com.bn.Playground.SpringFactory.Spring;
 import com.bn.Playground.SpringFactory.SpringL;
 import com.bn.Playground.TorusFactory.Torus;
@@ -30,7 +32,7 @@ public class MySurfaceView extends GLSurfaceView {
     private float mPreviousX;//上次的触控位置X坐标
 	
 	private SceneRenderer mRenderer;//场景渲染器
-    int[] textureIds = new int[3];      //系统分配的纹理id
+    int[] textureIds = new int[4];      //系统分配的纹理id
     
     boolean drawWhatFlag=true;	//绘制线填充方式的标志位
     boolean lightFlag=true;
@@ -82,6 +84,10 @@ public class MySurfaceView extends GLSurfaceView {
         Spring spring;
         SpringL springl;
 
+        Regular20 regular20;
+        Regular20L regular20L;
+
+
         public void onDrawFrame(GL10 gl) 
         { 
         	//清除深度缓冲与颜色缓冲
@@ -103,6 +109,11 @@ public class MySurfaceView extends GLSurfaceView {
                 case 3:
                     graph = spring;
                     graphl = springl;
+                    break;
+                case 4:
+                    graph = regular20;
+                    graphl = regular20L;
+                    break;
             }
             //保护现场
             MatrixState.pushMatrix();
@@ -166,6 +177,7 @@ public class MySurfaceView extends GLSurfaceView {
             textureIds[0]=initTexture(R.drawable.android_robot0);
             textureIds[1]=initTexture(R.drawable.android_robot1);
             textureIds[2]=initTexture(R.drawable.android_robot2);
+            textureIds[3] = initTexture(R.drawable.android_robot3);
 
             //创建圆柱对象 初始化
             cylinder = new Cylinder(MySurfaceView.this,1,1.2f,3.9f,36, textureIds[0], textureIds[0], textureIds[0]);
@@ -183,7 +195,10 @@ public class MySurfaceView extends GLSurfaceView {
             spring = new Spring(MySurfaceView.this,1.8f,1.0f,7f,3.3f,10,80, textureIds[2]);
             //创建螺旋管骨架对象
             springl= new SpringL(MySurfaceView.this,1.8f,1.0f,7f,3.3f,10,80);
-
+            //创建正20面体对象
+            regular20 = new Regular20(MySurfaceView.this,1,1.6f,10, textureIds[3]);
+            //创建正20面体骨架对象
+            regular20L = new Regular20L(MySurfaceView.this,1,1.6f,5);
         }
     }
 	
