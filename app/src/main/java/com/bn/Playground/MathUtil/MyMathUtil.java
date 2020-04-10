@@ -1,9 +1,9 @@
-package com.bn.Playground.Ragular20Factory;
+package com.bn.Playground.MathUtil;
 public class MyMathUtil {
 	static double a[][];
 	//通过doolittle分解解n元一次线性方程组的工具方法
 	static double[] doolittle(double a[][]){
-		MyMathUtil.a = a;
+		MyMathUtil.a=a;
 		int rowNum = a.length ;//获得未知数的个数
 		int xnum = a[0].length-rowNum;// 所求解的组数（一）
 		

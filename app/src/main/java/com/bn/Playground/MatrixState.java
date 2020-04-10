@@ -2,6 +2,8 @@ package com.bn.Playground;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import android.opengl.Matrix;
 
 //存储系统矩阵状态的类
@@ -11,14 +13,18 @@ public class MatrixState
     private static float[] mVMatrix = new float[16];//摄像机位置朝向9参数矩阵   
     private static float[] currMatrix;//当前变换矩阵
     public static float[] lightLocation=new float[]{0,0,0};//定位光光源位置
-    public static FloatBuffer cameraFB;    
+    public static FloatBuffer cameraFB;
     public static FloatBuffer lightPositionFB;
-      
+    private static ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    public static ReentrantReadWriteLock.ReadLock readLock = readWriteLock.readLock();
+    public static ReentrantReadWriteLock.WriteLock writeLock = readWriteLock.writeLock();
+
     //保护变换矩阵的栈
     static float[][] mStack=new float[10][16];
     static int stackTop=-1;
-    
-    public static void setInitStack()//获取不变换初始矩阵
+
+    /**获取不变换初始矩阵(初始举证)*/
+    public static void setInitStack()
     {
     	currMatrix=new float[16];
     	Matrix.setRotateM(currMatrix, 0, 0, 1, 0, 0);
@@ -176,7 +182,9 @@ public class MatrixState
     	
         llbbL.order(ByteOrder.nativeOrder());//设置字节顺序
         lightPositionFB=llbbL.asFloatBuffer();
+        writeLock.lock();
         lightPositionFB.put(lightLocation);
         lightPositionFB.position(0);
+        writeLock.unlock();
     }
 }

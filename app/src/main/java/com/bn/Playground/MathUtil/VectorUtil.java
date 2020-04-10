@@ -1,4 +1,4 @@
-package com.bn.Playground.Ragular20Factory;//包声明
+package com.bn.Playground.MathUtil;//包声明
 
 import java.util.ArrayList;
 
@@ -89,8 +89,8 @@ public class VectorUtil {
 		 * 注意结果是将劣弧等分
 		 */
 		//先将指向起点和终点的向量规格化
-		float[] s=VectorUtil.normalizeVector(start);//先将指向起点和终点的向量规格化
-		float[] e=VectorUtil.normalizeVector(end);
+		float[] s= VectorUtil.normalizeVector(start);//先将指向起点和终点的向量规格化
+		float[] e= VectorUtil.normalizeVector(end);
 		if(n==0){	//如果n为零，返回起点坐标
 			return new float[]{s[0]*r, s[1]*r, s[2]*r};
 		} else if (n == i) { // 如果n份的第(i+1)个点直接返回终点
@@ -101,7 +101,7 @@ public class VectorUtil {
 		double angrad1 = angrad*i/n;//所求向量和起点向量的夹角
 		double angrad2 = angrad-angrad1;//所求向量和终点向量的夹角
 		
-		float[] normal=VectorUtil.crossTwoVectors(s, e);//normal法向量, 求与s、e向量正交的向量
+		float[] normal= VectorUtil.crossTwoVectors(s, e);//normal法向量, 求与s、e向量正交的向量
 	
 		double matrix[][]={//用doolittle分解算法解n元一次线性方程组所需的系数矩阵
 				{s[0],s[1],s[2],Math.cos(angrad1)}, // 夹角cos值
@@ -116,8 +116,9 @@ public class VectorUtil {
 		
 		return new float[]{x*r, y*r, z*r};//得到所求点的坐标并返回
 	}
-	//计算线段的n等分点坐标的方法，start为线段起点坐标，end为线段终点坐标
-	//n为切分的总份数，i为所求点对应的份数编号
+
+	/**计算线段的n等分点坐标的方法，start为线段起点坐标，end为线段终点坐标
+	n为切分的总份数，i为所求点对应的份数编号*/
 	public static float[] devideLine(
 			float[] start, //线段起点坐标
 			float[] end, //线段终点坐标
@@ -140,5 +141,25 @@ public class VectorUtil {
 		float z=start[2]+ac[2];
 		//返回线段所求点坐标
 		return new float[]{x, y, z};
+	}
+
+	/**求两个向量的夹角*/
+	public static float angle(float[] vec1,float[] vec2){
+		//先求点积
+		float dp=dotTwoVectors(vec1,vec2);
+		//再求两个向量的模
+		float m1=module(vec1);
+		float m2=module(vec2);
+
+		float acos=dp/(m1*m2);
+
+		//为了避免计算误差带来的问题
+		if(acos>1)	{
+			acos=1;
+		}
+		else if(acos<-1){
+			acos=-1;
+		}
+		return (float)Math.acos(acos);
 	}
 }

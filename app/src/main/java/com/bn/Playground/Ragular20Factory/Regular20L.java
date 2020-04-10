@@ -3,6 +3,7 @@ package com.bn.Playground.Ragular20Factory;
 import android.opengl.GLES30;
 
 import com.bn.Playground.Graph;
+import com.bn.Playground.MathUtil.VectorUtil;
 import com.bn.Playground.MatrixState;
 import com.bn.Playground.MySurfaceView;
 import com.bn.Playground.ShaderUtil;
@@ -111,7 +112,7 @@ public class Regular20L implements Graph {
         }
 
         //按照生成的顶点编号序列填充顶点坐标数据数组
-        float[] vertices=VectorUtil.cullVertex(alVertix, alFaceIndex);
+        float[] vertices= VectorUtil.cullVertex(alVertix, alFaceIndex);
 
         //顶点坐标数据初始化
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);//创建顶点坐标数据缓冲

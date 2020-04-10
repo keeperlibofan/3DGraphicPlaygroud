@@ -20,6 +20,7 @@ import com.bn.Playground.CylinderFactory.Cylinder;
 import com.bn.Playground.CylinderFactory.CylinderL;
 import com.bn.Playground.Ragular20Factory.Regular20L;
 import com.bn.Playground.Ragular20Factory.Regular20;
+import com.bn.Playground.SoccerFacotry.Soccer;
 import com.bn.Playground.SpringFactory.Spring;
 import com.bn.Playground.SpringFactory.SpringL;
 import com.bn.Playground.TorusFactory.Torus;
@@ -51,15 +52,22 @@ public class MySurfaceView extends GLSurfaceView {
     public boolean onTouchEvent(MotionEvent e) {
         float y = e.getY();
         float x = e.getX();
+        // todo 双指触控就是平移整个坐标系, 单指双击就是回到默认视角
         switch (e.getAction()) {
-        case MotionEvent.ACTION_MOVE:
-            float dy = y - mPreviousY;//计算触控笔Y位移
-            float dx = x - mPreviousX;//计算触控笔X位移
-            mRenderer.graph.addyAngle(dx * TOUCH_SCALE_FACTOR);//设置绕y轴旋转角度
-            mRenderer.graph.addzAngle(dy * TOUCH_SCALE_FACTOR);//设置绕z轴旋转角度
+            case MotionEvent.ACTION_MOVE:
+                switch (e.getPointerCount()){
+                    case 1:
+                        float dy = y - mPreviousY;//计算触控笔Y位移
+                        float dx = x - mPreviousX;//计算触控笔X位移
+                        mRenderer.graph.addyAngle(dx * TOUCH_SCALE_FACTOR);//设置绕y轴旋转角度
+                        mRenderer.graph.addzAngle(dy * TOUCH_SCALE_FACTOR);//设置绕z轴旋转角度
 
-            mRenderer.graphl.addyAngle(dx * TOUCH_SCALE_FACTOR);//设置绕x轴旋转角度
-            mRenderer.graphl.addzAngle(dy * TOUCH_SCALE_FACTOR);//设置绕z轴旋转角度
+                        mRenderer.graphl.addyAngle(dx * TOUCH_SCALE_FACTOR);//设置绕x轴旋转角度
+                        mRenderer.graphl.addzAngle(dy * TOUCH_SCALE_FACTOR);//设置绕z轴旋转角度
+                        break;
+                    case 2: // 双指触控
+
+                }
         }
         mPreviousY = y;//记录触控笔位置
         mPreviousX = x;//记录触控笔位置
@@ -87,6 +95,7 @@ public class MySurfaceView extends GLSurfaceView {
         Regular20 regular20;
         Regular20L regular20L;
 
+        Soccer soccer;
 
         public void onDrawFrame(GL10 gl) 
         { 
@@ -114,6 +123,8 @@ public class MySurfaceView extends GLSurfaceView {
                     graph = regular20;
                     graphl = regular20L;
                     break;
+                case 5:
+                    graph = soccer;
             }
             //保护现场
             MatrixState.pushMatrix();
@@ -124,7 +135,6 @@ public class MySurfaceView extends GLSurfaceView {
                 graphl.drawSelf();
             }
             MatrixState.popMatrix();
-            
         }
 
         public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -164,6 +174,9 @@ public class MySurfaceView extends GLSurfaceView {
 	        }.start();
         }
 
+        /**
+         * surface创建的时候将所有的图形都创建, 顶点加载进入缓存
+         */
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             //设置屏幕背景色RGBA
             GLES30.glClearColor(0.0f,0.0f,0.0f, 1.0f);  
@@ -199,6 +212,8 @@ public class MySurfaceView extends GLSurfaceView {
             regular20 = new Regular20(MySurfaceView.this,1,1.6f,10, textureIds[3]);
             //创建正20面体骨架对象
             regular20L = new Regular20L(MySurfaceView.this,1,1.6f,5);
+            //创建soccer对象
+            soccer = new Soccer(MySurfaceView.this);
         }
     }
 	
