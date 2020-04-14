@@ -5,6 +5,7 @@ import android.opengl.GLES30;
 import com.bn.Playground.MatrixState;
 import com.bn.Playground.MySurfaceView;
 import com.bn.Playground.ShaderUtil;
+import com.bn.Playground.MathUtil.VectorUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

@@ -6,18 +6,23 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.opengl.Matrix;
 
+import com.bn.Playground.MathUtil.VectorUtil;
+
 //存储系统矩阵状态的类
 public class MatrixState 
 {  
 	private static float[] mProjMatrix = new float[16];//4x4矩阵 投影用
-    private static float[] mVMatrix = new float[16];//摄像机位置朝向9参数矩阵   
+
+    private static float[] mVMatrix = new float[16];//摄像机位置朝向9参数矩阵 这个类线程不安全
     private static float[] currMatrix;//当前变换矩阵
-    public static float[] lightLocation=new float[]{0,0,0};//定位光光源位置
+    public static float[] lightLocation = new float[]{0,0,0};//定位光光源位置
+
+    /**非线程安全类*/
     public static FloatBuffer cameraFB;
     public static FloatBuffer lightPositionFB;
     private static ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-    public static ReentrantReadWriteLock.ReadLock readLock = readWriteLock.readLock();
-    public static ReentrantReadWriteLock.WriteLock writeLock = readWriteLock.writeLock();
+    public static ReentrantReadWriteLock.ReadLock lightPositionFBReadLock = readWriteLock.readLock();
+    public static ReentrantReadWriteLock.WriteLock lightPositionFBWriteLock = readWriteLock.writeLock();
 
     //保护变换矩阵的栈
     static float[][] mStack=new float[10][16];
@@ -71,10 +76,64 @@ public class MatrixState
     	currMatrix=result;
     }
     
-    
     //设置摄像机
-    static ByteBuffer llbb= ByteBuffer.allocateDirect(3*4);
-    static float[] cameraLocation=new float[3];//摄像机位置
+    static ByteBuffer llbb = ByteBuffer.allocateDirect(3*4);
+
+    /**非线性安全的数组*/
+    static float[] cameraLocation = new float[3]; //摄像机位置
+    static float[] cameraTargetPoint = new float[3]; //摄像机朝向点
+    static float[] cameraUpVec = new float[3]; //摄像机朝向点
+    //static float[] cameraRightVec = new float[3]; // 摄像机右方向向量
+
+    /**
+     * 在相机相机朝向面上平移相机
+     * up向量为dy控制
+     **/
+    public static void translateCamera(float dx, float dy, float scale) {
+        dx *= scale;
+        dy *= scale;
+        float[] cameraOrientationVec = VectorUtil.subtract(cameraTargetPoint, cameraLocation);
+        float[] cameraLeftVec = VectorUtil.normalizeVector(VectorUtil.crossTwoVectors(cameraUpVec, cameraOrientationVec));
+        // 改变摄像机的位置和朝向点
+        cameraLocation = VectorUtil.add(cameraLocation, VectorUtil.scaleVector(dx, cameraLeftVec));
+        cameraLocation = VectorUtil.add(cameraLocation, VectorUtil.scaleVector(dy, cameraUpVec));
+
+        cameraTargetPoint = VectorUtil.add(cameraTargetPoint, VectorUtil.scaleVector(dx, cameraLeftVec));
+        cameraTargetPoint = VectorUtil.add(cameraTargetPoint, VectorUtil.scaleVector(dy, cameraUpVec));
+
+        float[] tempmVMatrix = new float[16];
+        Matrix.setLookAtM( // 这是一个会对原始数组做修改的一个函数, 是非线程安全的
+                tempmVMatrix,
+                0,
+                cameraLocation[0],
+                cameraLocation[1],
+                cameraLocation[2],
+                cameraTargetPoint[0],
+                cameraTargetPoint[1],
+                cameraTargetPoint[2],
+                cameraUpVec[0],
+                cameraUpVec[1],
+                cameraUpVec[2]
+        );
+        mVMatrix = tempmVMatrix;
+
+        FloatBuffer tempCameraFB;
+        llbb.clear();
+        llbb.order(ByteOrder.nativeOrder());//设置字节顺序
+        tempCameraFB=llbb.asFloatBuffer(); // 此事buffer还是空的
+        tempCameraFB.put(cameraLocation);
+        tempCameraFB.position(0);
+        cameraFB = tempCameraFB;
+    }
+
+    /**
+     * 改变相机朝向,同时改变相机
+     * 的up向量方向和targetPoint向量
+     **/
+    public static void rotateCamera(float dx, float dy) {
+
+    }
+
     public static void setCamera
     (
     		float cx,	//摄像机位置x
@@ -88,30 +147,38 @@ public class MatrixState
     		float upz   //摄像机UP向量Z分量		
     )
     {
-        	Matrix.setLookAtM
-            (
-            		mVMatrix, 
-            		0, 
-            		cx,
-            		cy,
-            		cz,
-            		tx,
-            		ty,
-            		tz,
-            		upx,
-            		upy,
-            		upz
-            );
-        	
-        	cameraLocation[0]=cx;
-        	cameraLocation[1]=cy;
-        	cameraLocation[2]=cz;
-        	
-        	llbb.clear();
-            llbb.order(ByteOrder.nativeOrder());//设置字节顺序
-            cameraFB=llbb.asFloatBuffer();
-            cameraFB.put(cameraLocation);
-            cameraFB.position(0);  
+        Matrix.setLookAtM
+        (
+                mVMatrix,
+                0,
+                cx,
+                cy,
+                cz,
+                tx,
+                ty,
+                tz,
+                upx,
+                upy,
+                upz
+        );
+
+        cameraLocation[0]=cx;
+        cameraLocation[1]=cy;
+        cameraLocation[2]=cz;
+
+        cameraTargetPoint[0] = tx;
+        cameraTargetPoint[1] = ty;
+        cameraTargetPoint[2] = tz;
+
+        cameraUpVec[0] = upx;
+        cameraUpVec[1] = upy;
+        cameraUpVec[2] = upz;
+
+        llbb.clear();
+        llbb.order(ByteOrder.nativeOrder());//设置字节顺序
+        cameraFB=llbb.asFloatBuffer();
+        cameraFB.put(cameraLocation);
+        cameraFB.position(0);
     }
     
     //设置透视投影参数
@@ -182,9 +249,9 @@ public class MatrixState
     	
         llbbL.order(ByteOrder.nativeOrder());//设置字节顺序
         lightPositionFB=llbbL.asFloatBuffer();
-        writeLock.lock();
+        lightPositionFBWriteLock.lock();
         lightPositionFB.put(lightLocation);
         lightPositionFB.position(0);
-        writeLock.unlock();
+        lightPositionFBWriteLock.unlock();
     }
 }

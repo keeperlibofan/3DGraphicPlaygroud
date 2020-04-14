@@ -18,6 +18,7 @@ import com.bn.Playground.ConeFactory.Cone;
 import com.bn.Playground.ConeFactory.ConeL;
 import com.bn.Playground.CylinderFactory.Cylinder;
 import com.bn.Playground.CylinderFactory.CylinderL;
+import com.bn.Playground.MathUtil.VectorUtil;
 import com.bn.Playground.Ragular20Factory.Regular20L;
 import com.bn.Playground.Ragular20Factory.Regular20;
 import com.bn.Playground.SoccerFacotry.Soccer;
@@ -28,10 +29,12 @@ import com.bn.Playground.TorusFactory.TorusL;
 
 public class MySurfaceView extends GLSurfaceView {
     
-	private final float TOUCH_SCALE_FACTOR = 180.0f/320;//角度缩放比例
+	private final float TOUCH_SCALE_FACTOR = 90.0f/320;//角度缩放比例
 	private float mPreviousY;//上次的触控位置Y坐标
     private float mPreviousX;//上次的触控位置X坐标
-	
+    private float mPreviousY1;//上次的触控位置Y坐标
+    private float mPreviousX1;//上次的触控位置X坐标
+
 	private SceneRenderer mRenderer;//场景渲染器
     int[] textureIds = new int[4];      //系统分配的纹理id
     
@@ -55,19 +58,51 @@ public class MySurfaceView extends GLSurfaceView {
         // todo 双指触控就是平移整个坐标系, 单指双击就是回到默认视角
         switch (e.getAction()) {
             case MotionEvent.ACTION_MOVE:
+                float dy = y - mPreviousY;//计算触控笔Y位移
+                float dx = x - mPreviousX;//计算触控笔X位移
+                float[] vec = {dx, dy, 0};
                 switch (e.getPointerCount()){
                     case 1:
-                        float dy = y - mPreviousY;//计算触控笔Y位移
-                        float dx = x - mPreviousX;//计算触控笔X位移
-                        mRenderer.graph.addyAngle(dx * TOUCH_SCALE_FACTOR);//设置绕y轴旋转角度
-                        mRenderer.graph.addzAngle(dy * TOUCH_SCALE_FACTOR);//设置绕z轴旋转角度
+                        if (mPreviousY != 0 || mPreviousX != 0) {
+                            mRenderer.graph.addyAngle(dx * TOUCH_SCALE_FACTOR); // 设置绕y轴旋转角度
+                            mRenderer.graph.addzAngle(-dy * TOUCH_SCALE_FACTOR); // 设置绕z轴旋转角度
 
-                        mRenderer.graphl.addyAngle(dx * TOUCH_SCALE_FACTOR);//设置绕x轴旋转角度
-                        mRenderer.graphl.addzAngle(dy * TOUCH_SCALE_FACTOR);//设置绕z轴旋转角度
+                            mRenderer.graphl.addyAngle(dx * TOUCH_SCALE_FACTOR); // 设置绕x轴旋转角度
+                            mRenderer.graphl.addzAngle(-dy * TOUCH_SCALE_FACTOR); // 设置绕z轴旋转角度
+                        }
                         break;
                     case 2: // 双指触控
+                        /**
+                         * 变换判定，如果向量夹角小于90度 判定为移动摄像头
+                         * 如果大于90度判定为缩放图形，移动方向判定为两向量和
+                         */
+                        float x1 = e.getX(1);
+                        float y1 = e.getY(1);
+                        if (mPreviousY1 != 0 || mPreviousX1 != 0) {
+                            float dy1 = y1 - mPreviousY1; // 计算触控笔Y位移
+                            float dx1 = x1 - mPreviousX1; // 计算触控笔X位移
+                            float[] vec1 = {dx1, dy1, 0};
+                            if (VectorUtil.angle(vec, vec1) < Math.PI / 2) {
+                                /** 判定为移动摄像机 */
+                                float[] resultVec = VectorUtil.add(vec, vec1);
+                                // 计算相机观察方向向量, 改变摄像机矩阵
+                                MatrixState.translateCamera(resultVec[0], resultVec[1], (float)0.01);
+                            } else {
+                                /** 判定为拉近摄像机 */
 
+                            }
+                        }
+                        mPreviousY1 = y1; // 记录值
+                        mPreviousX1 = x1; // 记录值
+                        break;
                 }
+                break;
+            case MotionEvent.ACTION_UP: /**只要还有触控点在屏幕上，每当手指离开都会触发这个事件*/
+                // 触发时将所有的 mPreviousY 都清零
+                mPreviousY = 0;
+                mPreviousX = 0;
+                mPreviousY1 = 0;
+                mPreviousX1 = 0;
         }
         mPreviousY = y;//记录触控笔位置
         mPreviousX = x;//记录触控笔位置
@@ -136,7 +171,6 @@ public class MySurfaceView extends GLSurfaceView {
             }
             MatrixState.popMatrix();
         }
-
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             //设置视窗大小及位置 
         	GLES30.glViewport(0, 0, width, height); 

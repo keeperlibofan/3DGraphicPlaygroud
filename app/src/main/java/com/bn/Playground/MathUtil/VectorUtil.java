@@ -2,16 +2,29 @@ package com.bn.Playground.MathUtil;//包声明
 
 import java.util.ArrayList;
 
-//计算三角形法向量的工具类
+/**计算三角形法向量的工具类*/
 public class VectorUtil {
-	//向量规格化的方法
+	/**缩放坐标*/
+	public static float[] scaleVector(double k, float[] vec) {
+		float[] result = new float[3];
+		for (int i = 0; i < vec.length; i++) {
+			result[i] = vec[i] * (float)k;
+		}
+		return result;
+	}
+
+	/**向量规格化的方法*/
 	public static float[] normalizeVector(float [] vec){
 		float mod=module(vec);
 		return new float[]{vec[0]/mod, vec[1]/mod, vec[2]/mod};//返回规格化后的向量
 	}
-	//求向量的模的方法
+	/**求向量的模的方法*/
 	public static float module(float [] vec){
-		return (float) Math.sqrt(vec[0]*vec[0]+vec[1]*vec[1]+vec[2]*vec[2]);
+		float sumOfSquares = 0;
+		for (float scalar: vec) {
+			sumOfSquares += scalar*scalar;
+		}
+		return (float) Math.sqrt(sumOfSquares);
 	}
 	//两个向量叉乘的方法
 	public static float[] crossTwoVectors(float[] a, float[] b)
@@ -143,6 +156,28 @@ public class VectorUtil {
 		return new float[]{x, y, z};
 	}
 
+	/**求多个向量的向量相减*/
+	public static float[] subtract(float[] startVec, float[]... vecs) {
+		float[] result = startVec.clone();
+		for (float[] vec: vecs) {
+			for (int i = 0; i < startVec.length; i++) {
+				result[i] -= vec[i];
+			}
+		}
+		return result;
+	}
+
+	/**求多个向量的向量和*/
+	public static float[] add(float[] baseVec, float[]... vecs) {
+		float[] result = baseVec.clone();
+		for (float[] vec: vecs) {
+			for (int i = 0; i < baseVec.length; i++) {
+				result[i] += vec[i];
+			}
+		}
+		return result;
+	}
+
 	/**求两个向量的夹角*/
 	public static float angle(float[] vec1,float[] vec2){
 		//先求点积
@@ -161,5 +196,22 @@ public class VectorUtil {
 			acos=-1;
 		}
 		return (float)Math.acos(acos);
+	}
+
+	/**计算圆锥面指定棱顶点法向量的方法*/
+	public static float[] calConeNormal
+			(
+			 float x0,float y0,float z0,//A，中心点(底面圆的圆心)
+			 float x1,float y1,float z1,//B，底面圆上的某一点
+			 float x2,float y2,float z2 //C，圆锥中心最高点
+			)
+	{
+		float[] a={x1-x0, y1-y0, z1-z0};//向量AB
+		float[] b={x2-x0, y2-y0, z2-z0};//向量AC
+		float[] c={x2-x1, y2-y1, z2-z1};//向量BC
+		float[] k=crossTwoVectors(a,b);//先求平面ABC的法向量k
+
+		float[] d=crossTwoVectors(c,k);//将c和k做叉乘，得出所求向量d
+		return normalizeVector(d);//返回规格化后的法向量
 	}
 }

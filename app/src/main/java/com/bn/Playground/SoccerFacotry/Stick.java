@@ -230,9 +230,9 @@ public class Stick
          //将摄像机位置传入shader程序   
          GLES30.glUniform3fv(maCameraHandle, 1, MatrixState.cameraFB);
          //将光源位置传入shader程序
-        MatrixState.readLock.lock();
+        MatrixState.lightPositionFBReadLock.lock();
          GLES30.glUniform3fv(maLightLocationHandle, 1, MatrixState.lightPositionFB);
-		MatrixState.readLock.unlock();
+		MatrixState.lightPositionFBReadLock.unlock();
 
 		//传送顶点位置数据
          GLES30.glVertexAttribPointer  

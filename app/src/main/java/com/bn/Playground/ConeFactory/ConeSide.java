@@ -2,6 +2,7 @@ package com.bn.Playground.ConeFactory;
 
 import android.opengl.GLES30;
 
+import com.bn.Playground.MathUtil.VectorUtil;
 import com.bn.Playground.MatrixState;
 import com.bn.Playground.MySurfaceView;
 import com.bn.Playground.ShaderUtil;
@@ -100,7 +101,7 @@ public class ConeSide
 				normals[norCount++]=1;
 				normals[norCount++]=0;
 			}else{ //当前的顶点为底面圆周上的点
-				float [] norXYZ=VectorUtil.calConeNormal(//通过3个顶点的坐标求出法向量
+				float [] norXYZ= VectorUtil.calConeNormal(//通过3个顶点的坐标求出法向量
 						0, 0, 0, 						//底面圆的中心点
 						vertices[i], vertices[i+1], vertices[i+2], //当前底面圆周顶点坐标
 						0, h, 0);						//圆锥中心最高点坐标
