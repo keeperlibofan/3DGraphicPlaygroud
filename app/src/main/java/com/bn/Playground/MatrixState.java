@@ -80,26 +80,61 @@ public class MatrixState
     static ByteBuffer llbb = ByteBuffer.allocateDirect(3*4);
 
     /**非线性安全的数组*/
-    static float[] cameraLocation = new float[3]; //摄像机位置
-    static float[] cameraTargetPoint = new float[3]; //摄像机朝向点
-    static float[] cameraUpVec = new float[3]; //摄像机朝向点
+    private static float[] cameraLocation = new float[3]; //摄像机位置
+    private static float[] cameraTargetPoint = new float[3]; //摄像机朝向点
+    private static float[] cameraUpVec = new float[3]; //摄像机朝向点
     //static float[] cameraRightVec = new float[3]; // 摄像机右方向向量
 
     /**
      * 在相机相机朝向面上平移相机
      * up向量为dy控制
      **/
-    public static void translateCamera(float dx, float dy, float scale) {
+    static void translateCamera(float dx, float dy, float scale) {
         dx *= scale;
         dy *= scale;
         float[] cameraOrientationVec = VectorUtil.subtract(cameraTargetPoint, cameraLocation);
         float[] cameraLeftVec = VectorUtil.normalizeVector(VectorUtil.crossTwoVectors(cameraUpVec, cameraOrientationVec));
         // 改变摄像机的位置和朝向点
-        cameraLocation = VectorUtil.add(cameraLocation, VectorUtil.scaleVector(dx, cameraLeftVec));
-        cameraLocation = VectorUtil.add(cameraLocation, VectorUtil.scaleVector(dy, cameraUpVec));
+        float[] tempCameraLocation = VectorUtil.add(cameraLocation, VectorUtil.scaleVector(dx, cameraLeftVec));
+        tempCameraLocation = VectorUtil.add(tempCameraLocation, VectorUtil.scaleVector(dy, cameraUpVec));
 
-        cameraTargetPoint = VectorUtil.add(cameraTargetPoint, VectorUtil.scaleVector(dx, cameraLeftVec));
-        cameraTargetPoint = VectorUtil.add(cameraTargetPoint, VectorUtil.scaleVector(dy, cameraUpVec));
+        float[] tempCameraTargetPoint = VectorUtil.add(cameraTargetPoint, VectorUtil.scaleVector(dx, cameraLeftVec));
+        tempCameraTargetPoint = VectorUtil.add(tempCameraTargetPoint, VectorUtil.scaleVector(dy, cameraUpVec));
+
+        setCamera(tempCameraLocation, tempCameraTargetPoint, cameraUpVec);
+    }
+
+    /**沿着相机朝向拉近拉远*/
+    static void zoomInCamera(float dz, float scale) {
+        dz *= scale;
+        float[] orientation = VectorUtil.subtract(cameraTargetPoint, cameraLocation);// 朝向
+        orientation = VectorUtil.scaleVector(dz, orientation); // 正负效果
+
+        float[] tempCameraLocation = VectorUtil.add(cameraLocation, orientation);
+        float[] tempCameraTargetPoint = VectorUtil.add(cameraTargetPoint, orientation);
+
+        setCamera(tempCameraLocation, tempCameraTargetPoint, cameraUpVec);
+    }
+
+    /**
+     * 改变相机朝向,同时改变相机
+     * 的up向量方向和targetPoint向量
+     **/
+    public static void changeCameraOrientation(float dx, float dy) {
+
+    }
+
+    /**旋转摄像机*/
+    public static void rotateCamera(float dx, float dy) {
+
+    }
+
+    /**设置摄像机*/
+    synchronized private static void setCamera(float[] tempCameraLocation, float[] tempCameraTargetPoint, float[] tempCameraUpVec) {
+        // 只有此处可以写
+        cameraLocation = tempCameraLocation;
+        cameraUpVec = tempCameraTargetPoint;
+        cameraUpVec = tempCameraUpVec;
 
         float[] tempmVMatrix = new float[16];
         Matrix.setLookAtM( // 这是一个会对原始数组做修改的一个函数, 是非线程安全的
@@ -124,14 +159,6 @@ public class MatrixState
         tempCameraFB.put(cameraLocation);
         tempCameraFB.position(0);
         cameraFB = tempCameraFB;
-    }
-
-    /**
-     * 改变相机朝向,同时改变相机
-     * 的up向量方向和targetPoint向量
-     **/
-    public static void rotateCamera(float dx, float dy) {
-
     }
 
     public static void setCamera

@@ -86,10 +86,17 @@ public class MySurfaceView extends GLSurfaceView {
                                 /** 判定为移动摄像机 */
                                 float[] resultVec = VectorUtil.add(vec, vec1);
                                 // 计算相机观察方向向量, 改变摄像机矩阵
-                                MatrixState.translateCamera(resultVec[0], resultVec[1], (float)0.01);
+                                MatrixState.translateCamera(-resultVec[0], -resultVec[1], (float)0.01);
                             } else {
-                                /** 判定为拉近摄像机 */
-
+                                /** 判定为拉近摄像机 通过两点的距离来判断, 如果距离变大就拉远距离变小就拉近*/
+                                // 原距离
+                                float[] previousPoint = {mPreviousX, mPreviousY};
+                                float[] previousPoint1 = {mPreviousX1, mPreviousY1};
+                                float originDistance = VectorUtil.distanceTwoVector(previousPoint, previousPoint1);
+                                float[] Point = {x, y};
+                                float[] Point1 = {x1, y1};
+                                float distance = VectorUtil.distanceTwoVector(Point, Point1);
+                                MatrixState.zoomInCamera(distance - originDistance, (float) 0.01);
                             }
                         }
                         mPreviousY1 = y1; // 记录值

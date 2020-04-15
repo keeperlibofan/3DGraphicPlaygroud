@@ -178,6 +178,15 @@ public class VectorUtil {
 		return result;
 	}
 
+	/**求两点的距离*/
+	public static float distanceTwoVector(float[] vec1, float[] vec2) {
+		float result = 0;
+		for (int i = 0; i < vec1.length; i++) {
+			result += Math.pow(vec1[i] - vec2[i], 2);
+		}
+		return (float) Math.sqrt(result);
+	}
+
 	/**求两个向量的夹角*/
 	public static float angle(float[] vec1,float[] vec2){
 		//先求点积
