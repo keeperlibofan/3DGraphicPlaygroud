@@ -21,8 +21,8 @@ import static com.bn.Playground.ShaderUtil.createProgram; // 引入静态方法
  */
 public class Regular20 implements Graph
 {	
-	private int mProgram;//自定义渲染管线着色器程序id
-    private int muMVPMatrixHandle;//总变换矩阵引用
+	private int mProgram; //自定义渲染管线着色器程序id
+    private int muMVPMatrixHandle; //总变换矩阵引用
     private int maPositionHandle; //顶点位置属性引用
     private int maTexCoorHandle; //顶点纹理坐标属性引用
     private int muMMatrixHandle;
