@@ -1,4 +1,4 @@
-package com.bn.Playground.IndiaFactory;
+package com.bn.Playground.IndiaBuildingFactory;
 
 import java.util.ArrayList;
 

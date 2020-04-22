@@ -15,99 +15,99 @@ import java.util.ArrayList;
 import static com.bn.Playground.ShaderUtil.createProgram;
 
 /**
- * Ô²»·¹Ç¼ÜÀà
+ * Ô²ï¿½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½
  **/
 public class TorusL implements Graph
 {	
-	int mProgram;//×Ô¶¨ÒåäÖÈ¾¹ÜÏß×ÅÉ«Æ÷³ÌÐòid
-    int muMVPMatrixHandle;//×Ü±ä»»¾ØÕóÒýÓÃ
-    int maPositionHandle; //¶¥µãÎ»ÖÃÊôÐÔÒýÓÃ
-    int maColorHandle; //¶¥µãÑÕÉ«ÊôÐÔÒýÓÃ 
+	int mProgram;//ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½È¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½id
+    int muMVPMatrixHandle;//ï¿½Ü±ä»»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    int maPositionHandle; //ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    int maColorHandle; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
     
-    String mVertexShader;//¶¥µã×ÅÉ«Æ÷    	 
-    String mFragmentShader;//Æ¬Ôª×ÅÉ«Æ÷
+    String mVertexShader;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½    	 
+    String mFragmentShader;//Æ¬Ôªï¿½ï¿½É«ï¿½ï¿½
 	
-	FloatBuffer   mVertexBuffer;//¶¥µã×ø±êÊý¾Ý»º³å
-	FloatBuffer   mColorBuffer;	//¶¥µãÑÕÉ«Êý¾Ý»º³å
+	FloatBuffer   mVertexBuffer;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½
+	FloatBuffer   mColorBuffer;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½
 	
     int vCount=0;
-	private float xAngle=0;//ÈÆxÖáÐý×ªµÄ½Ç¶È
+	private float xAngle=0;//ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½×ªï¿½Ä½Ç¶ï¿½
 	public void addxAngle(float xAngle) {
 		this.xAngle += xAngle;
 	}
-	private float yAngle=0;//ÈÆyÖáÐý×ªµÄ½Ç¶È
+	private float yAngle=0;//ï¿½ï¿½yï¿½ï¿½ï¿½ï¿½×ªï¿½Ä½Ç¶ï¿½
 	public void addyAngle(float yAngle) {
 		this.yAngle += yAngle;
 	}
-	private float zAngle=0;//ÈÆzÖáÐý×ªµÄ½Ç¶È
+	private float zAngle=0;//ï¿½ï¿½zï¿½ï¿½ï¿½ï¿½×ªï¿½Ä½Ç¶ï¿½
 	public void addzAngle(float zAngle) {
 		this.zAngle += zAngle;
 	}
     
     public TorusL(MySurfaceView mv, float rBig, float rSmall, int nCol , int nRow)
     {
-    	//µ÷ÓÃ³õÊ¼»¯¶¥µãÊý¾ÝµÄinitVertexData·½·¨
+    	//ï¿½ï¿½ï¿½Ã³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½initVertexDataï¿½ï¿½ï¿½ï¿½
     	initVertexData(rBig,rSmall,nCol,nRow);
-    	//µ÷ÓÃ³õÊ¼»¯×ÅÉ«Æ÷µÄintShader·½·¨
+    	//ï¿½ï¿½ï¿½Ã³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½intShaderï¿½ï¿½ï¿½ï¿½
     	initShader(mv);
     }
     
-    //×Ô¶¨ÒåµÄ³õÊ¼»¯¶¥µãÊý¾ÝµÄ·½·¨
+    //ï¿½Ô¶ï¿½ï¿½ï¿½Ä³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÝµÄ·ï¿½ï¿½ï¿½
     public void initVertexData(
-			float rBig, float rSmall,//´ó°ë¾¶£¬Ð¡°ë¾¶
-			int nCol ,int nRow) {//ÁÐÊý£¬ÐÐÊý
-		//³ÉÔ±±äÁ¿³õÊ¼»¯
+			float rBig, float rSmall,//ï¿½ï¿½ë¾¶ï¿½ï¿½Ð¡ï¿½ë¾¶
+			int nCol ,int nRow) {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 		float angdegColSpan=360.0f/nCol;
 		float angdegRowSpan=360.0f/nRow;
-		float A=(rBig-rSmall)/2;//ÓÃÓÚÐý×ªµÄÐ¡Ô²°ë¾¶
-		float D=rSmall+A;//Ðý×ª¹ì¼£ÐÎ³ÉµÄ´óÔ²ÖÜ°ë¾¶
-		vCount=3*nCol*nRow*2;//¶¥µã¸öÊý£¬¹²ÓÐnColumn*nRow*2¸öÈý½ÇÐÎ£¬Ã¿¸öÈý½ÇÐÎ¶¼ÓÐÈý¸ö¶¥µã
-		//×ø±êÊý¾Ý³õÊ¼»¯
-		ArrayList<Float> alVertix=new ArrayList<Float>();//Ô­¶¥µãÁÐ±í£¨Î´¾íÈÆ£©
-		ArrayList<Integer> alFaceIndex=new ArrayList<Integer>();//×éÖ¯³ÉÃæµÄ¶¥µãµÄË÷ÒýÖµÁÐ±í£¨°´ÄæÊ±Õë¾íÈÆ£©
+		float A=(rBig-rSmall)/2;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Ð¡Ô²ï¿½ë¾¶
+		float D=rSmall+A;//ï¿½ï¿½×ªï¿½ì¼£ï¿½Î³ÉµÄ´ï¿½Ô²ï¿½Ü°ë¾¶
+		vCount=3*nCol*nRow*2;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nColumn*nRow*2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î£ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½Ê¼ï¿½ï¿½
+		ArrayList<Float> alVertix=new ArrayList<Float>();//Ô­ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Î´ï¿½ï¿½ï¿½Æ£ï¿½
+		ArrayList<Integer> alFaceIndex=new ArrayList<Integer>();//ï¿½ï¿½Ö¯ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Æ£ï¿½
 		
-		//¶¥µã
+		//ï¿½ï¿½ï¿½ï¿½
 		for(float angdegCol=0;Math.ceil(angdegCol)<360+angdegColSpan;
 		angdegCol+=angdegColSpan)	{
-			double a=Math.toRadians(angdegCol);//µ±Ç°Ð¡Ô²ÖÜ»¡¶È
-			for(float angdegRow=0;Math.ceil(angdegRow)<360+angdegRowSpan;angdegRow+=angdegRowSpan)//ÖØ¸´ÁËÒ»ÁÐ¶¥µã£¬·½±ãÁËË÷ÒýµÄ¼ÆËã
+			double a=Math.toRadians(angdegCol);//ï¿½ï¿½Ç°Ð¡Ô²ï¿½Ü»ï¿½ï¿½ï¿½
+			for(float angdegRow=0;Math.ceil(angdegRow)<360+angdegRowSpan;angdegRow+=angdegRowSpan)//ï¿½Ø¸ï¿½ï¿½ï¿½Ò»ï¿½Ð¶ï¿½ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 			{
-				double u=Math.toRadians(angdegRow);//µ±Ç°´óÔ²ÖÜ»¡¶È
+				double u=Math.toRadians(angdegRow);//ï¿½ï¿½Ç°ï¿½ï¿½Ô²ï¿½Ü»ï¿½ï¿½ï¿½
 				float y=(float) (A*Math.cos(a));
 				float x=(float) ((D+A*Math.sin(a))*Math.sin(u));
 				float z=(float) ((D+A*Math.sin(a))*Math.cos(u));
-				//½«¼ÆËã³öÀ´µÄXYZ×ø±ê¼ÓÈë´æ·Å¶¥µã×ø±êµÄArrayList
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½XYZï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ArrayList
         		alVertix.add(x); alVertix.add(y); alVertix.add(z);
 			}
 		}		
 		
-		//Ë÷Òý
+		//ï¿½ï¿½ï¿½ï¿½
 		for(int i=0;i<nCol;i++){
 			for(int j=0;j<nRow;j++){
-				int index=i*(nRow+1)+j;//µ±Ç°Ë÷Òý
-				//¾íÈÆË÷Òý
-				alFaceIndex.add(index+1);//ÏÂÒ»ÁÐ---1
-				alFaceIndex.add(index+nRow+1);//ÏÂÒ»ÁÐ---2
-				alFaceIndex.add(index+nRow+2);//ÏÂÒ»ÐÐÏÂÒ»ÁÐ---3
+				int index=i*(nRow+1)+j;//ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				alFaceIndex.add(index+1);//ï¿½ï¿½Ò»ï¿½ï¿½---1
+				alFaceIndex.add(index+nRow+1);//ï¿½ï¿½Ò»ï¿½ï¿½---2
+				alFaceIndex.add(index+nRow+2);//ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½---3
 				
-				alFaceIndex.add(index+1);//ÏÂÒ»ÁÐ---1
-				alFaceIndex.add(index);//µ±Ç°---0
-				alFaceIndex.add(index+nRow+1);//ÏÂÒ»ÁÐ---2
+				alFaceIndex.add(index+1);//ï¿½ï¿½Ò»ï¿½ï¿½---1
+				alFaceIndex.add(index);//ï¿½ï¿½Ç°---0
+				alFaceIndex.add(index+nRow+1);//ï¿½ï¿½Ò»ï¿½ï¿½---2
 			}
 		}
-		//¼ÆËã¾íÈÆ¶¥µã
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½
 		float[] vertices=new float[vCount*3];
-		cullTexCoor(alVertix, alFaceIndex, vertices);//Í¨¹ýÔ­¶¥µãºÍÃæµÄË÷ÒýÖµ£¬µÃµ½ÓÃ¶¥µã¾íÈÆµÄÊý×é
+		cullTexCoor(alVertix, alFaceIndex, vertices);//Í¨ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ãµï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½
 		
-		//¶¥µã×ø±êÊý¾Ý³õÊ¼»¯
-		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);//´´½¨¶¥µã×ø±êÊý¾Ý»º³å
-        vbb.order(ByteOrder.nativeOrder());//ÉèÖÃ×Ö½ÚË³ÐòÎª±¾µØ²Ù×÷ÏµÍ³Ë³Ðò
-        mVertexBuffer = vbb.asFloatBuffer();//×ª»»ÎªfloatÐÍ»º³å
-        mVertexBuffer.put(vertices);//Ïò»º³åÇøÖÐ·ÅÈë¶¥µã×ø±êÊý¾Ý
-        mVertexBuffer.position(0);//ÉèÖÃ»º³åÇøÆðÊ¼Î»ÖÃ
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½Ê¼ï¿½ï¿½
+		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½
+        vbb.order(ByteOrder.nativeOrder());//ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Ë³ï¿½ï¿½Îªï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ÏµÍ³Ë³ï¿½ï¿½
+        mVertexBuffer = vbb.asFloatBuffer();//×ªï¿½ï¿½Îªfloatï¿½Í»ï¿½ï¿½ï¿½
+        mVertexBuffer.put(vertices);//ï¿½ò»º³ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ë¶¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        mVertexBuffer.position(0);//ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Î»ï¿½ï¿½
 
         
-        float[] colors=new float[vCount*4];//¶¥µãÑÕÉ«Êý×é
+        float[] colors=new float[vCount*4];//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½
 		int Count=0;
 		for(int i=0;i<vCount;i++)
 		{
@@ -117,21 +117,21 @@ public class TorusL implements Graph
 			colors[Count++]=1;	//a
 			
 		}
-        //´´½¨¶¥µã×ÅÉ«Êý¾Ý»º³å
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½
         ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length*4);
-        cbb.order(ByteOrder.nativeOrder());//ÉèÖÃ×Ö½ÚË³ÐòÎª±¾µØ²Ù×÷ÏµÍ³Ë³Ðò
-        mColorBuffer = cbb.asFloatBuffer();//×ª»»ÎªFloatÐÍ»º³å
-        mColorBuffer.put(colors);//Ïò»º³åÇøÖÐ·ÅÈë¶¥µã×ÅÉ«Êý¾Ý
-        mColorBuffer.position(0);//ÉèÖÃ»º³åÇøÆðÊ¼Î»ÖÃ
+        cbb.order(ByteOrder.nativeOrder());//ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Ë³ï¿½ï¿½Îªï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ÏµÍ³Ë³ï¿½ï¿½
+        mColorBuffer = cbb.asFloatBuffer();//×ªï¿½ï¿½ÎªFloatï¿½Í»ï¿½ï¿½ï¿½
+        mColorBuffer.put(colors);//ï¿½ò»º³ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ë¶¥ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½
+        mColorBuffer.position(0);//ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Î»ï¿½ï¿½
 	}
     
-	//Í¨¹ýÔ­¶¥µãºÍÃæµÄË÷ÒýÖµ£¬µÃµ½ÓÃ¶¥µã¾íÈÆµÄÊý×é
+	//Í¨ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ãµï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½
 	public static void cullTexCoor(
-			ArrayList<Float> alv,//Ô­¶¥µãÁÐ±í£¨Î´¾íÈÆ£©
-			ArrayList<Integer> alFaceIndex,//×éÖ¯³ÉÃæµÄ¶¥µãµÄË÷ÒýÖµÁÐ±í£¨°´ÄæÊ±Õë¾íÈÆ£©
-			float[] vertices//ÓÃ¶¥µã¾íÈÆµÄÊý×é£¨¶¥µã½á¹û·ÅÈë¸ÃÊý×éÖÐ£¬Êý×é³¤¶ÈÓ¦µÈÓÚË÷ÒýÁÐ±í³¤¶ÈµÄ3±¶£©
+			ArrayList<Float> alv,//Ô­ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Î´ï¿½ï¿½ï¿½Æ£ï¿½
+			ArrayList<Integer> alFaceIndex,//ï¿½ï¿½Ö¯ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Æ£ï¿½
+			float[] vertices//ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½é£¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½é³¤ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ï¿½Èµï¿½3ï¿½ï¿½ï¿½ï¿½
 		){
-		//Éú³É¶¥µãµÄÊý×é
+		//ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		int vCount=0;
 		for(int i:alFaceIndex){
 			vertices[vCount++]=alv.get(3*i);
@@ -139,20 +139,20 @@ public class TorusL implements Graph
 			vertices[vCount++]=alv.get(3*i+2);
 		}
 	}
-    //³õÊ¼»¯×ÅÉ«Æ÷
+    //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
     public void initShader(MySurfaceView mv)
     {
-    	//¼ÓÔØ¶¥µã×ÅÉ«Æ÷µÄ½Å±¾ÄÚÈÝ
+    	//ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ä½Å±ï¿½ï¿½ï¿½ï¿½ï¿½
         mVertexShader= ShaderUtil.loadFromAssetsFile("color.vert", mv.getResources());
-        //¼ÓÔØÆ¬Ôª×ÅÉ«Æ÷µÄ½Å±¾ÄÚÈÝ
+        //ï¿½ï¿½ï¿½ï¿½Æ¬Ôªï¿½ï¿½É«ï¿½ï¿½ï¿½Ä½Å±ï¿½ï¿½ï¿½ï¿½ï¿½
         mFragmentShader=ShaderUtil.loadFromAssetsFile("color.frag", mv.getResources());
-        //»ùÓÚ¶¥µã×ÅÉ«Æ÷ÓëÆ¬Ôª×ÅÉ«Æ÷´´½¨³ÌÐò
+        //ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½Æ¬Ôªï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         mProgram = createProgram(mVertexShader, mFragmentShader);
-        //»ñÈ¡³ÌÐòÖÐ¶¥µãÎ»ÖÃÊôÐÔÒýÓÃid  
+        //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½id  
         maPositionHandle = GLES30.glGetAttribLocation(mProgram, "aPosition");
-        //»ñÈ¡³ÌÐòÖÐ¶¥µãÑÕÉ«ÊôÐÔÒýÓÃid  
+        //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½id  
         maColorHandle= GLES30.glGetAttribLocation(mProgram, "aColor");
-        //»ñÈ¡³ÌÐòÖÐ×Ü±ä»»¾ØÕóÒýÓÃid
+        //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü±ä»»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½id
         muMVPMatrixHandle = GLES30.glGetUniformLocation(mProgram, "uMVPMatrix");  
     }
     
@@ -163,12 +163,12 @@ public class TorusL implements Graph
    	 	MatrixState.rotate(yAngle, 0, 1, 0);
    	 	MatrixState.rotate(zAngle, 0, 0, 1);
    	 	
-    	 //ÖÆ¶¨Ê¹ÓÃÄ³Ì×shader³ÌÐò
+    	 //ï¿½Æ¶ï¿½Ê¹ï¿½ï¿½Ä³ï¿½ï¿½shaderï¿½ï¿½ï¿½ï¿½
     	 GLES30.glUseProgram(mProgram);        
-         //½«×îÖÕ±ä»»¾ØÕó´«Èëshader³ÌÐò
+         //ï¿½ï¿½ï¿½ï¿½ï¿½Õ±ä»»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½shaderï¿½ï¿½ï¿½ï¿½
          GLES30.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0);
          
-         //´«ËÍ¶¥µãÎ»ÖÃÊý¾Ý
+         //ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
          GLES30.glVertexAttribPointer  
          (
          		maPositionHandle,   
@@ -178,7 +178,7 @@ public class TorusL implements Graph
                 3*4,   
                 mVertexBuffer
          );       
-         //´«ËÍ¶¥µãÑÕÉ«Êý¾Ý
+         //ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½
          GLES30.glVertexAttribPointer  
          (
         		maColorHandle, 
@@ -189,14 +189,14 @@ public class TorusL implements Graph
                 mColorBuffer
          );   
          
-         //ÆôÓÃ¶¥µãÎ»ÖÃÊý¾Ý
+         //ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
          GLES30.glEnableVertexAttribArray(maPositionHandle);
-         //ÆôÓÃ¶¥µãÑÕÉ«Êý¾Ý
+         //ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½
          GLES30.glEnableVertexAttribArray(maColorHandle);  
          
-         //»æÖÆÏßÌõµÄ´ÖÏ¸
+         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ï¸
          GLES30.glLineWidth(2);
-         //»æÖÆ
+         //ï¿½ï¿½ï¿½ï¿½
          GLES30.glDrawArrays(GLES30.GL_LINE_STRIP, 0, vCount); 
          
     }

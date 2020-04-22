@@ -1,4 +1,4 @@
-package com.bn.Playground.IndiaFactory;
+package com.bn.Playground.IndiaBuildingFactory;
 
 /**
  * 绘制穹顶的类
@@ -46,11 +46,44 @@ public class Top implements Graph {
         position1.add(new BNPosition(30, 230));	//控制点坐标数据7
         position1.add(new BNPosition(0, 253));//控制点坐标数据8
         ArrayList<BNPosition> position2 = new ArrayList<BNPosition>();
-
+        //加入数据点
+        position2.add(new BNPosition(0, 113));
+        position2.add(new BNPosition(28, 128));
+        position2.add(new BNPosition(57, 150));
+        position2.add(new BNPosition(24, 135));
+        position2.add(new BNPosition(42, 125));
+        position2.add(new BNPosition(36, 152));
+        position2.add(new BNPosition(28, 175));
+        position2.add(new BNPosition(14, 226));
+        position2.add(new BNPosition(38, 191));
+        position2.add(new BNPosition(21, 202));
+        position2.add(new BNPosition(-1, 208));
         ArrayList<BNPosition> position3 = new ArrayList<BNPosition>();
-
+        //加入数据点
+        position3.add(new BNPosition(97, 35));
+        position3.add(new BNPosition(165, 175));
+        position3.add(new BNPosition(81, 143));
+        position3.add(new BNPosition(58, 162));
+        position3.add(new BNPosition(42, 172));
+        position3.add(new BNPosition(26, 186));
+        position3.add(new BNPosition(72, 231));
+        position3.add(new BNPosition(38, 187));
+        position3.add(new BNPosition(18, 159));
+        position3.add(new BNPosition(77, 214));
+        position3.add(new BNPosition(83, 186));
+        position3.add(new BNPosition(69, 169));
+        position3.add(new BNPosition(55, 206));
+        position3.add(new BNPosition(0, 246));
         ArrayList<BNPosition> position4 = new ArrayList<BNPosition>();
-
+        //加入数据点
+        position4.add(new BNPosition(97, 35));
+        position4.add(new BNPosition(98, 61));
+        position4.add(new BNPosition(100, 92));
+        position4.add(new BNPosition(75, 121));
+        position4.add(new BNPosition(167, 104));
+        position4.add(new BNPosition(81, 74));
+        position4.add(new BNPosition(97, 119));
+        position4.add(new BNPosition(97, 130));
 
         //创建对象
         top1=new TopPart(mv,0.4f*scale,nCol,nRow, texId, position1);//穹顶的第一部分
@@ -61,7 +94,6 @@ public class Top implements Graph {
     }
     public void drawSelf()
     {
-
         MatrixState.rotate(xAngle, 1, 0, 0);
         MatrixState.rotate(yAngle, 0, 1, 0);
         MatrixState.rotate(zAngle, 0, 0, 1);

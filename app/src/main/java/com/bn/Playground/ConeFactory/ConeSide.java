@@ -161,7 +161,7 @@ public class ConeSide
     public void drawSelf(int texId)
     {        
     	 //制定使用某套shader程序
-    	 GLES30.glUseProgram(mProgram);        
+    	 GLES30.glUseProgram(mProgram);
          //将最终变换矩阵传入shader程序
          GLES30.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0);
          //将位置、旋转变换矩阵传入shader程序

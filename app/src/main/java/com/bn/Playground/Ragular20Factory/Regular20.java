@@ -70,8 +70,8 @@ public class Regular20 implements Graph
 		float r = (float) Math.sqrt(aHalf*aHalf+bHalf*bHalf);//几何球的半径
 		vCount=3*20*n*n;//顶点个数
 		
-		ArrayList<Float> alVertix20 = new ArrayList<Float>();//正二十面体的顶点列表
-		ArrayList<Integer> alFaceIndex20 = new ArrayList<Integer>();//用于卷绕构成正二十面体各个三角形的顶点编号列表
+		ArrayList<Float> alVertix20 = new ArrayList<>();//正二十面体的顶点列表
+		ArrayList<Integer> alFaceIndex20 = new ArrayList<>();//用于卷绕构成正二十面体各个三角形的顶点编号列表
 		
 		initAlVertix20(alVertix20,aHalf,bHalf);//初始化正二十面体的顶点坐标数据
 		
@@ -165,7 +165,7 @@ public class Regular20 implements Graph
 
 		//按照生成的顶点编号序列填充顶点纹理坐标数据数组（正二十面体的）
 		float[] st20=VectorUtil.cullTexCoor(alST20, alTexIndex20);
-		ArrayList<Float> alST=new ArrayList<Float>(); //几何球的原始纹理坐标列表（未卷绕）
+		ArrayList<Float> alST=new ArrayList<>(); //几何球的原始纹理坐标列表（未卷绕）
 		for(int k=0;k<st20.length;k+=6)
 		{//对正二十面体的各个三角形进行循环
 			float [] st1=new float[]{st20[k], st20[k+1], 0};//取出当前三角形

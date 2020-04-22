@@ -1,4 +1,4 @@
-package com.bn.Playground.IndiaFactory;
+package com.bn.Playground.IndiaBuildingFactory;
 
 import android.opengl.GLES30;
 
@@ -14,8 +14,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import static com.bn.Playground.IndiaFactory.Utility.calTextures;
-import static com.bn.Playground.IndiaFactory.Utility.calVertices;
+import static com.bn.Playground.IndiaBuildingFactory.Utility.calTextures;
+import static com.bn.Playground.IndiaBuildingFactory.Utility.calVertices;
 import static com.bn.Playground.ShaderUtil.createProgram;
 
 /**四个顶部的Factory类*/

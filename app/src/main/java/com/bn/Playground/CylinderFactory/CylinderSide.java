@@ -28,10 +28,10 @@ class CylinderSide
     String mVertexShader;//顶点着色器代码脚本	 
     String mFragmentShader;//片元着色器代码脚本
 	
-	FloatBuffer   mVertexBuffer;//顶点坐标数据缓冲
-	FloatBuffer   mTexCoorBuffer;//顶点纹理坐标数据缓冲
-	FloatBuffer   mNormalBuffer;//顶点法向量数据缓冲
-    int vCount=0;   
+	private FloatBuffer   mVertexBuffer;//顶点坐标数据缓冲
+	private FloatBuffer   mTexCoorBuffer;//顶点纹理坐标数据缓冲
+	private FloatBuffer   mNormalBuffer;//顶点法向量数据缓冲
+    int vCount=0;
     float xAngle=0;//绕x轴旋转的角度
     float yAngle=0;//绕y轴旋转的角度
     float zAngle=0;//绕z轴旋转的角度
@@ -166,8 +166,6 @@ class CylinderSide
         maLightLocationHandle=GLES30.glGetUniformLocation(mProgram, "uLightLocation"); 
         //获取位置、旋转变换矩阵引用id
         muMMatrixHandle = GLES30.glGetUniformLocation(mProgram, "uMMatrix");  
-        
-        
     }
     
     public void drawSelf(int texId)
