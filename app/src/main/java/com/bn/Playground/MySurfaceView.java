@@ -19,6 +19,8 @@ import com.bn.Playground.ConeFactory.ConeL;
 import com.bn.Playground.CylinderFactory.Cylinder;
 import com.bn.Playground.CylinderFactory.CylinderL;
 import com.bn.Playground.MathUtil.VectorUtil;
+import com.bn.Playground.ObjLoader.LoadUtil;
+import com.bn.Playground.ObjLoader.LoadedObjectVertexOnly;
 import com.bn.Playground.Ragular20Factory.Regular20L;
 import com.bn.Playground.Ragular20Factory.Regular20;
 import com.bn.Playground.SoccerFacotry.Soccer;
@@ -116,7 +118,7 @@ public class MySurfaceView extends GLSurfaceView {
         return true;
     }
     
-	private class SceneRenderer implements GLSurfaceView.Renderer 
+	private class SceneRenderer implements GLSurfaceView.Renderer
     {
         Graph graph;
         Graph graphl;
@@ -138,6 +140,8 @@ public class MySurfaceView extends GLSurfaceView {
         Regular20L regular20L;
 
         Soccer soccer;
+
+        LoadedObjectVertexOnly lovo;
 
         public void onDrawFrame(GL10 gl) 
         { 
@@ -167,6 +171,8 @@ public class MySurfaceView extends GLSurfaceView {
                     break;
                 case 5:
                     graph = soccer;
+                case 6:
+                    graph = lovo;
             }
             //保护现场
             MatrixState.pushMatrix();
@@ -184,7 +190,7 @@ public class MySurfaceView extends GLSurfaceView {
         	//计算GLSurfaceView的宽高比
             float ratio= (float) width / height;
             //调用此方法计算产生透视投影矩阵
-            MatrixState.setProjectFrustum(-ratio, ratio, -1, 1, 4f, 100);
+            MatrixState.setProjectFrustum(-ratio, ratio, -1, 1, 4f, 500);
             //调用此方法产生摄像机9参数位置矩阵
             MatrixState.setCamera(0,0,8.0f,0f,0f,0f,0f,1.0f,0.0f); 
             
@@ -255,9 +261,10 @@ public class MySurfaceView extends GLSurfaceView {
             regular20L = new Regular20L(MySurfaceView.this,1,1.6f,5);
             //创建soccer对象
             soccer = new Soccer(MySurfaceView.this);
+            lovo = LoadUtil.loadFromFile("ch.obj", MySurfaceView.this.getResources(), MySurfaceView.this);
         }
     }
-	
+
 	public int initTexture(int drawableId)//textureId
 	{
 		//生成纹理ID

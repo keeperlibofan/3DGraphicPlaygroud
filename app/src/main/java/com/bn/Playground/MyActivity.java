@@ -24,7 +24,7 @@ public class MyActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN ,  
 		              WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		//设置为竖屏模式
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 		//切换到主界面
 		setContentView(R.layout.main);		
 		//初始化GLSurfaceView
@@ -71,7 +71,7 @@ public class MyActivity extends Activity {
             new View.OnClickListener() {
                 public void onClick(View v) {
                     mySurfaceView.count ++;
-                    mySurfaceView.count %= 6;
+                    mySurfaceView.count %= 7;
                     System.out.println(mySurfaceView.count);
                 }
             }
