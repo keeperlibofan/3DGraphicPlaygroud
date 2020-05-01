@@ -20,7 +20,7 @@ import com.bn.Playground.CylinderFactory.Cylinder;
 import com.bn.Playground.CylinderFactory.CylinderL;
 import com.bn.Playground.MathUtil.VectorUtil;
 import com.bn.Playground.ObjLoader.LoadUtil;
-import com.bn.Playground.ObjLoader.LoadedObjectVertexOnly;
+import com.bn.Playground.ObjLoader.LoadedObjectVertex;
 import com.bn.Playground.Ragular20Factory.Regular20L;
 import com.bn.Playground.Ragular20Factory.Regular20;
 import com.bn.Playground.SoccerFacotry.Soccer;
@@ -141,7 +141,7 @@ public class MySurfaceView extends GLSurfaceView {
 
         Soccer soccer;
 
-        LoadedObjectVertexOnly lovo;
+        LoadedObjectVertex lov;
 
         public void onDrawFrame(GL10 gl) 
         { 
@@ -172,7 +172,7 @@ public class MySurfaceView extends GLSurfaceView {
                 case 5:
                     graph = soccer;
                 case 6:
-                    graph = lovo;
+                    graph = lov;
             }
             //保护现场
             MatrixState.pushMatrix();
@@ -261,7 +261,7 @@ public class MySurfaceView extends GLSurfaceView {
             regular20L = new Regular20L(MySurfaceView.this,1,1.6f,5);
             //创建soccer对象
             soccer = new Soccer(MySurfaceView.this);
-            lovo = LoadUtil.loadFromFile("ch.obj", MySurfaceView.this.getResources(), MySurfaceView.this);
+            lov = LoadUtil.loadFromFile("ch.obj", MySurfaceView.this.getResources(), MySurfaceView.this);
         }
     }
 

@@ -9,15 +9,15 @@ public class Cone implements Graph
 {
 	Circle bottomCircle;//底圆
 	ConeSide coneSide;//侧面
-	private float xAngle=0;//绕x轴旋转的角度
+	private float xAngle = 0;//绕x轴旋转的角度
 	public void addxAngle(float xAngle) {
 		this.xAngle += xAngle;
 	}
-	private float yAngle=0;//绕y轴旋转的角度
+	private float yAngle = 0;//绕y轴旋转的角度
 	public void addyAngle(float yAngle) {
 		this.yAngle += yAngle;
 	}
-	private float zAngle=0;//绕z轴旋转的角度
+	private float zAngle = 0;//绕z轴旋转的角度
 	public void addzAngle(float zAngle) {
 		this.zAngle += zAngle;
 	}
@@ -30,10 +30,10 @@ public class Cone implements Graph
 	public Cone(MySurfaceView mySurfaceView, float scale, float r, float h, int n,
 				int BottomTexId, int sideTexId)
 	{
-		this.scale=scale;
-		this.h=h;
-		this.BottomTexId=BottomTexId;
-		this.sideTexId=sideTexId;
+		this.scale = scale;
+		this.h = h;
+		this.BottomTexId = BottomTexId;
+		this.sideTexId = sideTexId;
 		
 		bottomCircle = new Circle(mySurfaceView, scale, r, n);  //创建底面圆对象
 		coneSide = new ConeSide(mySurfaceView, scale, r, h, n); //创建圆锥侧面对象
