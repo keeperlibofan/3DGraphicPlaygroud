@@ -362,7 +362,7 @@ public class Regular20 implements Graph
          //启用顶点位置数据
          GLES30.glEnableVertexAttribArray(maPositionHandle);
          //启用顶点纹理数据
-         GLES30.glEnableVertexAttribArray(maTexCoorHandle);  
+         GLES30.glEnableVertexAttribArray(maTexCoorHandle);
          //启用顶点法向量数据
          GLES30.glEnableVertexAttribArray(maNormalHandle);
          
