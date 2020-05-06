@@ -101,7 +101,7 @@ public class ShaderUtil
    //从sh脚本中加载shader内容的方法
    public static String loadFromAssetsFile(String fname,Resources r)
    {
-   	String result=null;    	
+   	String result=null;
    	try
    	{
    		InputStream in=r.getAssets().open(fname);

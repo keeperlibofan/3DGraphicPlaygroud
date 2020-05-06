@@ -52,9 +52,10 @@ void main()
     ambientZM=ambientTemp;//将正面环境光最终强度传给片元着色
     diffuseZM=diffuseTemp;//将正面散射光最终强度传给片元着色
     specularZM=specularTemp;//将正面镜面反射光最终强度传给片元着色
-    //进行反面光照计算
+    //进行反面光照计算 将法向量求反值
     pointLight(normalize(-aNormal),ambientTemp,diffuseTemp,specularTemp,uLightLocation,vec4(0.1,0.1,0.1,1.0),vec4(0.7,0.7,0.7,1.0),vec4(0.3,0.3,0.3,1.0));
     ambientFM=ambientTemp;//将反面环境光最终强度传给片元着色器
     diffuseFM=diffuseTemp;//将反面散射光最终强度传给片元着色器
     specularFM=specularTemp;//将反面镜面反射光最终强度传给片元着色器
-}                      
+    // 也就是正反两面同时渲染
+}

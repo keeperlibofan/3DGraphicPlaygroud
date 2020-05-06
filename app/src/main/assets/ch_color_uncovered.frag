@@ -13,6 +13,7 @@ void main()
 {//主函数
     //将计算出的颜色给此片元
     vec4 finalColor=vec4(0.9,0.9,0.9,1.0);   //片元的原始颜色
+    // 每调用一次渲染一个面的一个片元 如果要渲染两面就需要被调用多次
     if(gl_FrontFacing) // 内建变量，可以轻易得知是物体正面还是反面
     {
         fragColor = finalColor*ambientZM+finalColor*specularZM+finalColor*diffuseZM;//给此片元正面颜色值
