@@ -229,8 +229,8 @@ public class MySurfaceView extends GLSurfaceView {
             GLES30.glClearColor(0.0f,0.0f,0.0f, 1.0f);  
             //启用深度测试
             GLES30.glEnable(GLES30.GL_DEPTH_TEST);
-    		//设置为打开背面剪裁
-            GLES30.glEnable(GLES30.GL_CULL_FACE);
+    		//设置为关闭背面剪裁
+            GLES30.glDisable(GLES30.GL_CULL_FACE);
             //初始化变换矩阵
             MatrixState.setInitStack();
             //加载纹理
@@ -261,7 +261,7 @@ public class MySurfaceView extends GLSurfaceView {
             regular20L = new Regular20L(MySurfaceView.this,1,1.6f,5);
             //创建soccer对象
             soccer = new Soccer(MySurfaceView.this);
-            lov = LoadUtil.loadFromFile("ch.obj", MySurfaceView.this.getResources(), MySurfaceView.this);
+            lov = LoadUtil.loadFromFile("ch_uncovered.obj", MySurfaceView.this.getResources(), MySurfaceView.this);
         }
     }
 
